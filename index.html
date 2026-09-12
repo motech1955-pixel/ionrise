@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IONRISE — Never Get Stranded</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --white:#FFFFFF;
+    --slate-light:#F8FAFC;
+    --slate-dark:#0F172A;
+    --slate-muted:#64748B;
+    --border:#E2E8F0;
+    --cyan:#06B6D4;
+    --cyan-deep:#0891B2;
+  }
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    font-family:'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background:var(--white);
+    color:var(--slate-dark);
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{color:inherit;text-decoration:none;}
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 32px;
+  }
+
+  /* ---------- Focus states ---------- */
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--cyan-deep);
+    outline-offset:3px;
+    border-radius:4px;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    position:sticky;
+    top:0;
+    z-index:50;
+    background:rgba(255,255,255,0.85);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+  }
+
+  .nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height:76px;
+  }
+
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-weight:800;
+    font-size:1.28rem;
+    letter-spacing:-0.02em;
+    color:var(--slate-dark);
+  }
+
+  .logo .mark{
+    width:auto;
+    height:36px;
+    object-fit:contain;
+    flex-shrink:0;
+  }
+
+  .nav-links{
+    display:flex;
+    gap:40px;
+    list-style:none;
+  }
+
+  .nav-links a{
+    font-size:0.96rem;
+    font-weight:500;
+    color:var(--slate-muted);
+    transition:color 0.15s ease;
+  }
+  .nav-links a:hover{color:var(--slate-dark);}
+
+  .nav-right{display:flex;align-items:center;gap:28px;}
+
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:600;
+    font-size:0.95rem;
+    border-radius:999px;
+    border:none;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+
+  .btn-primary{
+    background:var(--cyan);
+    color:var(--white);
+    padding:12px 26px;
+    transition:background 0.18s ease, transform 0.18s ease;
+  }
+  .btn-primary:hover{background:var(--cyan-deep); transform:translateY(-1px);}
+
+  .btn-primary.large{padding:15px 32px; font-size:1rem;}
+
+  .link-ghost{
+    font-weight:600;
+    font-size:0.95rem;
+    color:var(--slate-dark);
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+  }
+
+  .play-circle{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    border:1.5px solid var(--border);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    transition:border-color 0.18s ease;
+  }
+  .link-ghost:hover .play-circle{border-color:var(--cyan);}
+
+  .mobile-toggle{display:none;}
+
+  /* ---------- Hero ---------- */
+  .hero{
+    padding:96px 0 80px;
+  }
+
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:64px;
+    align-items:center;
+  }
+
+  .eyebrow-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:0.86rem;
+    font-weight:600;
+    color:var(--cyan-deep);
+    background:rgba(6,182,212,0.08);
+    border:1px solid rgba(6,182,212,0.2);
+    border-radius:999px;
+    padding:6px 14px 6px 10px;
+    margin-bottom:28px;
+  }
+  .eyebrow-tag svg{width:14px;height:14px;flex-shrink:0;}
+
+  .hero h1{
+    font-size:4.1rem;
+    font-weight:800;
+    letter-spacing:-0.035em;
+    line-height:1.03;
+    color:var(--slate-dark);
+    margin-bottom:24px;
+  }
+
+  .hero .sub{
+    font-size:1.2rem;
+    color:var(--slate-muted);
+    max-width:460px;
+    margin-bottom:40px;
+    font-weight:400;
+  }
+
+  .cta-row{
+    display:flex;
+    align-items:center;
+    gap:32px;
+  }
+
+  .hero-visual{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  .visual-frame{
+    width:100%;
+    aspect-ratio:1/1;
+    background:var(--slate-light);
+    border:1px solid var(--border);
+    border-radius:28px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    overflow:hidden;
+  }
+
+  .visual-frame::before{
+    content:"";
+    position:absolute;
+    width:420px;
+    height:420px;
+    background:radial-gradient(circle, rgba(6,182,212,0.13) 0%, rgba(6,182,212,0) 70%);
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+  }
+
+  .product-shot{
+    position:relative;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
+  }
+
+  .spec-chip{
+    position:absolute;
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:10px 16px;
+    font-size:0.82rem;
+    font-weight:600;
+    box-shadow:0 8px 24px rgba(15,23,42,0.06);
+    display:flex;
+    flex-direction:column;
+    gap:2px;
+  }
+  .spec-chip .val{color:var(--slate-dark); font-size:0.98rem;}
+  .spec-chip .lbl{color:var(--slate-muted); font-weight:500; font-size:0.72rem;}
+
+  .chip-1{top:14%; left:6%;}
+  .chip-2{bottom:12%; right:4%;}
+
+  /* ---------- Section shared ---------- */
+  section{padding:112px 0;}
+
+  .section-head{
+    max-width:560px;
+    margin-bottom:64px;
+  }
+
+  .section-head h2{
+    font-size:2.6rem;
+    font-weight:800;
+    letter-spacing:-0.03em;
+    color:var(--slate-dark);
+    margin-bottom:16px;
+  }
+
+  .section-head p{
+    font-size:1.08rem;
+    color:var(--slate-muted);
+  }
+
+  /* ---------- How It Works ---------- */
+  .how{background:var(--slate-light);}
+
+  .steps{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:28px;
+  }
+
+  .step-card{
+    background:var(--white);
+    border:1px solid var(--border);
+    border-radius:20px;
+    padding:36px 32px;
+    position:relative;
+  }
+
+  .step-index{
+    font-size:0.85rem;
+    font-weight:700;
+    color:var(--cyan-deep);
+    margin-bottom:22px;
+    display:block;
+  }
+
+  .step-icon{
+    width:46px;
+    height:46px;
+    border-radius:12px;
+    background:var(--slate-light);
+    border:1px solid var(--border);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:22px;
+  }
+  .step-icon svg{width:22px;height:22px;color:var(--cyan-deep);}
+
+  .step-card h3{
+    font-size:1.24rem;
+    font-weight:700;
+    margin-bottom:10px;
+    letter-spacing:-0.01em;
+  }
+
+  .step-card p{
+    font-size:0.98rem;
+    color:var(--slate-muted);
+  }
+
+  /* ---------- About ---------- */
+  .about{
+    display:grid;
+    grid-template-columns:0.85fr 1.15fr;
+    gap:64px;
+    align-items:center;
+  }
+
+  .about-mark{
+    width:64px;
+    height:64px;
+    border-radius:16px;
+    background:var(--slate-dark);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:28px;
+  }
+  .about-mark svg{width:28px;height:28px;color:var(--cyan);}
+
+  .about h2{
+    font-size:2.3rem;
+    font-weight:800;
+    letter-spacing:-0.03em;
+    margin-bottom:20px;
+  }
+
+  .about p{
+    font-size:1.12rem;
+    color:var(--slate-muted);
+    max-width:480px;
+  }
+
+  .about-panel{
+    background:var(--slate-light);
+    border:1px solid var(--border);
+    border-radius:24px;
+    padding:48px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:36px;
+  }
+
+  .about-stat .num{
+    font-size:2.1rem;
+    font-weight:800;
+    color:var(--slate-dark);
+    letter-spacing:-0.02em;
+  }
+  .about-stat .lbl{
+    font-size:0.9rem;
+    color:var(--slate-muted);
+    margin-top:4px;
+  }
+
+  /* ---------- Pre-order band ---------- */
+  .band{
+    background:var(--slate-dark);
+    border-radius:28px;
+    padding:72px 64px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:40px;
+    margin:0 32px;
+    max-width:1180px;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  .band h2{
+    color:var(--white);
+    font-size:2.2rem;
+    font-weight:800;
+    letter-spacing:-0.03em;
+    max-width:460px;
+    line-height:1.15;
+  }
+
+  .band .btn-primary{flex-shrink:0;}
+
+  /* ---------- Footer ---------- */
+  footer{
+    border-top:1px solid var(--border);
+    padding:56px 0 40px;
+  }
+
+  .foot-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    margin-bottom:48px;
+    gap:40px;
+    flex-wrap:wrap;
+  }
+
+  .foot-cols{
+    display:flex;
+    gap:72px;
+  }
+
+  .foot-col h4{
+    font-size:0.86rem;
+    font-weight:600;
+    color:var(--slate-dark);
+    margin-bottom:16px;
+  }
+
+  .foot-col a{
+    display:block;
+    font-size:0.92rem;
+    color:var(--slate-muted);
+    margin-bottom:12px;
+    transition:color 0.15s ease;
+  }
+  .foot-col a:hover{color:var(--cyan-deep);}
+
+  .foot-bottom{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding-top:28px;
+    border-top:1px solid var(--border);
+    font-size:0.86rem;
+    color:var(--slate-muted);
+    flex-wrap:wrap;
+    gap:12px;
+  }
+
+  /* ---------- Modals ---------- */
+  dialog.modal {
+    padding: 0;
+    border: none;
+    border-radius: 20px;
+    background: transparent;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    max-width: 90vw;
+  }
+
+  dialog.modal::backdrop {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+  }
+
+  .modal-content {
+    background: var(--white);
+    padding: 32px;
+    border-radius: 20px;
+    position: relative;
+    width: 400px;
+    max-width: 100%;
+  }
+
+  .video-container {
+    width: 800px;
+    padding: 16px;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: var(--slate-light);
+    border: none;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 20px;
+    color: var(--slate-dark);
+    transition: background 0.15s ease;
+  }
+
+  .close-btn:hover {
+    background: var(--border);
+  }
+
+  .form-group {
+    margin-bottom: 16px;
+    text-align: left;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--slate-dark);
+    margin-bottom: 6px;
+  }
+
+  .form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.15s ease;
+  }
+
+  .form-group input:focus {
+    outline: none;
+    border-color: var(--cyan);
+  }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:900px){
+    .wrap{padding:0 24px;}
+    .nav-links{display:none;}
+    .hero-grid{grid-template-columns:1fr; gap:56px;}
+    .hero{padding:56px 0 64px;}
+    .hero h1{font-size:2.8rem;}
+    .cta-row{flex-wrap:wrap; row-gap:20px;}
+    .steps{grid-template-columns:1fr;}
+    .about{grid-template-columns:1fr;}
+    .about-panel{padding:32px;}
+    .band{flex-direction:column; align-items:flex-start; padding:48px 32px; margin:0 24px;}
+    .band h2{font-size:1.8rem;}
+    .foot-cols{gap:40px;}
+    section{padding:72px 0;}
+    .video-container { width: 100%; }
+  }
+
+  @media (max-width:520px){
+    .hero h1{font-size:2.2rem;}
+    .section-head h2{font-size:2rem;}
+    .foot-top{flex-direction:column;}
+    .foot-cols{gap:32px;}
+    .spec-chip{padding:8px 12px;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <div class="logo"><img class="mark" src="assets/logo.png" alt="IONRISE"></div>
+    <ul class="nav-links">
+      <li><a href="#product">Product</a></li>
+      <li><a href="#how">How It Works</a></li>
+      <li><a href="#about">About Us</a></li>
+    </ul>
+    <div class="nav-right">
+      <a href="#" onclick="document.getElementById('preorderModal').showModal(); return false;" class="btn btn-primary">Pre-order</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" id="product">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="eyebrow-tag">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>
+          For every EV, everywhere in Egypt
+        </span>
+        <h1>Never Get<br>Stranded.</h1>
+        <p class="sub">The compact EV emergency power bank and smart trip assistant that rides in your trunk.</p>
+        <div class="cta-row">
+          <a href="#" onclick="document.getElementById('preorderModal').showModal(); return false;" class="btn btn-primary large">Pre-order Core</a>
+          <a href="#" onclick="document.getElementById('videoModal').showModal(); return false;" class="link-ghost">
+            <span class="play-circle">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="var(--slate-dark)"><path d="M8 5v14l11-7z"/></svg>
+            </span>
+            Watch Demo
+          </a>
+        </div>
+      </div>
+
+      <div class="hero-visual">
+        <div class="visual-frame">
+          <video src="assets/product_video.mp4" autoplay muted playsinline class="product-shot" style="width: 100%; height: 100%; object-fit: cover;" ontimeupdate="if(this.currentTime >= 2) this.pause();"></video>
+        </div>
+        <div class="spec-chip chip-1">
+          <span class="val">15–20 km</span>
+          <span class="lbl">Emergency range boost</span>
+        </div>
+        <div class="spec-chip chip-2">
+          <span class="val">Carry-on</span>
+          <span class="lbl">Trunk-ready size</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how" id="how">
+    <div class="wrap">
+      <div class="section-head">
+        <h2>Three steps to peace of mind</h2>
+        <p>IONRISE works quietly in the background, then steps in the moment you need it.</p>
+      </div>
+
+      <div class="steps">
+        <div class="step-card">
+          <span class="step-index">Step 1</span>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M7 7V5a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v2"/></svg>
+          </div>
+          <h3>Pack in Trunk</h3>
+          <p>Lightweight and carry-on sized, it fits easily into any EV's trunk without eating into your cargo space.</p>
+        </div>
+
+        <div class="step-card">
+          <span class="step-index">Step 2</span>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="3"/><path d="M9 18h6"/><path d="M12 7v5l3 2"/></svg>
+          </div>
+          <h3>Smart Companion App</h3>
+          <p>Tracks your battery, alerts you before you run out, and navigates you to the nearest active charging stations in Egypt (like Infinity and TAQA) after an emergency top-up.</p>
+        </div>
+
+        <div class="step-card">
+          <span class="step-index">Step 3</span>
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>
+          </div>
+          <h3>Emergency Top-up</h3>
+          <p>Delivers an instant 15–20 km boost, enough to safely reach the nearest public charging station.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about wrap" id="about">
+    <div>
+      <div class="about-mark">
+        <img src="assets/logo.png" alt="" width="30" height="30">
+      </div>
+      <h2>About Us</h2>
+      <p>Apex Mobility Solutions is building accessible emergency charging solutions to make electric mobility fearless across Egypt. We design small, dependable hardware for the moments that matter most on the road.</p>
+      <img src="assets/product_hq.jpeg" alt="IONRISE High Quality" style="margin-top: 32px; border-radius: 24px; width: 100%; box-shadow: 0 20px 40px rgba(0,0,0,0.1);">
+    </div>
+
+    <div class="about-panel">
+      <div class="about-stat">
+        <div class="num">15–20km</div>
+        <div class="lbl">Emergency range per charge</div>
+      </div>
+      <div class="about-stat">
+        <div class="num">1</div>
+        <div class="lbl">Carry-on sized unit</div>
+      </div>
+      <div class="about-stat">
+        <div class="num">24/7</div>
+        <div class="lbl">Smart app monitoring</div>
+      </div>
+      <div class="about-stat">
+        <div class="num">EG</div>
+        <div class="lbl">Built for Egypt's roads</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRE-ORDER BAND -->
+  <section id="preorder" style="padding-top:0; padding-bottom:112px;">
+    <div class="band">
+      <div>
+        <h2>Reserve your IONRISE Core before the first shipment sells out.</h2>
+        <p style="color: var(--slate-muted); margin-top: 12px; font-size: 1.05rem;">Official Launch & Shipping: <strong style="color: var(--white);">Early 2027</strong></p>
+      </div>
+      <a href="#" onclick="document.getElementById('preorderModal').showModal(); return false;" class="btn btn-primary large">Pre-order Core</a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="logo"><img class="mark" src="assets/logo.png" alt="IONRISE"></div>
+      <div class="foot-cols">
+        <div class="foot-col">
+          <h4>Product</h4>
+          <a href="#product">Overview</a>
+          <a href="#how">How It Works</a>
+          <a href="#" onclick="document.getElementById('preorderModal').showModal(); return false;">Pre-order</a>
+        </div>
+        <div class="foot-col">
+          <h4>Company</h4>
+          <a href="#about">About Us</a>
+          <a href="mailto:hello@ionrise.com">Contact</a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span>© 2026 IONRISE, a product of Apex Mobility Solutions.</span>
+      <span>hello@ionrise.com</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Video Modal -->
+<dialog id="videoModal" class="modal">
+  <div class="modal-content video-container">
+    <button class="close-btn" onclick="document.getElementById('videoModal').close()">&times;</button>
+    <video controls style="width: 100%; border-radius: 8px;">
+      <source src="assets/demo_video.mp4" type="video/mp4">
+      Your browser does not support HTML video.
+    </video>
+  </div>
+</dialog>
+
+<!-- Pre-order Modal -->
+<dialog id="preorderModal" class="modal">
+  <div class="modal-content">
+    <button class="close-btn" onclick="document.getElementById('preorderModal').close()">&times;</button>
+    <h2 style="margin-bottom: 16px;">Pre-order IONRISE Core</h2>
+    <form onsubmit="event.preventDefault(); alert('Thank you for your pre-order! We will contact you soon.'); document.getElementById('preorderModal').close();">
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" id="name" required placeholder="Enter your full name">
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" required placeholder="Enter your email address">
+      </div>
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" required placeholder="Enter your phone number">
+      </div>
+      <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 16px;">Submit</button>
+    </form>
+  </div>
+</dialog>
+
+</body>
+</html>
